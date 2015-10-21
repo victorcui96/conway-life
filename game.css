@@ -1,0 +1,91 @@
+h2 {
+	text-align: center;
+	color: Green;
+}
+
+canvas {
+	padding: 0;
+	margin: auto;
+	display: block;
+}
+
+fieldset {
+	margin-top: 10px;  
+	border: 2px solid LightSeaGreen;
+	display: inline;  
+}
+
+button {
+	color: purple;	
+	width: 60px;
+	height: 25px;
+	font-weight: bold;
+	text-align: center;
+} 
+
+#startstop {
+	color: fuchsia;
+}
+
+#reset {
+	color: Crimson;
+}
+
+#randomize {
+	color: Lime;
+	width: 100px;
+}
+
+#nextstep {
+	width: 100px;
+	color: MidnightBlue;
+	white-space: normal;
+}
+
+#extrasettings {
+	position: relative;
+	right: 140px;
+	width: 850px;
+	margin-right: auto;
+	margin-left: 145px;
+}
+
+#funsettings {
+	display:inline;
+	color: Blue;
+}
+
+#default {
+	margin-bottom: 15px;
+	height: 50px;
+}
+.hint em {
+	font-style: normal;
+	color: #ffa500;
+}
+
+label {
+	margin-top: 20px;
+}
+
+.wackySettings p {
+	color: red;
+}
+
+.wackySettings button {
+	height: 35px;
+}
+
+#outsideMode{
+	color: dodgerblue;
+	text-emphasis: bold;
+}
+
+
+
+
+
+
+
+
+
