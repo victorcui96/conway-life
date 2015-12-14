@@ -1,4 +1,5 @@
-$(document).ready(function(){
+$(document).ready(function() {
+
 	var canvas = document.getElementById("grid");
 	var context = canvas.getContext("2d");
 	//creating a 2-D array that holds the squares in my canvas
@@ -79,15 +80,14 @@ $(document).ready(function(){
 		context.fillStyle = "white";
 		context.fillRect(x,y,9,9);
 	}
-	
+	//marks squares that have once been alive
 	function makeLightGreen(context, x, y)
 	{
 		context.fillStyle = "LightGreen";
 		context.fillRect(x,y,9,9);
 	}
 	
-	
-	//square turns black when user clicks them
+
 	canvas.addEventListener('click', function(evt)
 	{
 		var mousePosition = getRect(canvas, evt);
@@ -157,19 +157,26 @@ $(document).ready(function(){
 			}
 		}
 	};
+
+	//user input for game parameters
+	var $neighborhoodRadiusInput = $("#changeRadius");
+	var changeLoneliness = document.getElementById("changeLoneliness");
+	var changeOverpopulation = document.getElementById("changeOverpopulation");
+	var changeGMin = document.getElementById("changeGMin");
+	var changeGMax = document.getElementById("changeGMax");
 	
-	//determine which cells will die in the next time step
 	//Default values
-	var neighborhoodRadius = 1; //IMPORTANT //Default value
-	var loneliness = 2;
-	var overpopulation = 3;
-	var gMin =3, gMax = 3;
+	var neighborhoodRadius = parseInt($neighborhoodRadiusInput.val());
+	var loneliness = parseInt(changeLoneliness.value);
+	var overpopulation = parseInt(changeOverpopulation.value);
+	var gMin = parseInt(changeGMin.value);
+	var gMax = parseInt(changeGMax.value);
 	var speed = 200;
 	
 	function runAutomaton()
 	{
 		//need a temp array to determine which cells are destined to live
-		//originaly array is kept the same
+		//original array is kept the same
 		var tempArr = [];
 		for (var i = 0; i < twoDarr.length; i++)
 		{
@@ -212,11 +219,7 @@ $(document).ready(function(){
 				
 				if (twoDarr[x][y] === 1)
 				{
-					//currently live cell
-					/* if (equilibrium(count))
-					{
-						tempArr[x][y] = 1;
-					} */
+		
 					if (deathByLoneliness(count)) 
 					{
 						tempArr[x][y] = false;
@@ -292,7 +295,6 @@ $(document).ready(function(){
 	}
 		
 	//search for neighbors within a neighborhood radius
-	
 	function countLiveNeighbors(x, y)
 	{
 	
@@ -320,10 +322,7 @@ $(document).ready(function(){
 		{
 			for (var y = 0; y < twoDarr[x].length; y++)
 			{
-				//if (twoDarr[x][y] === 1)
-				{
-					killSquare(context, y*10, x*10);
-				}
+				killSquare(context, y*10, x*10);
 				twoDarr[x][y] = 0;
 			}
 		}
@@ -358,12 +357,12 @@ $(document).ready(function(){
 		}
 		return true;
 	}
+
 	//run the automaton
 	var startDate = null;
 	var canAdvanceAutomaton = false, canChangeSpeed = false;
 	var paused = false;
 	var interval_timer;
-	//var hasAdvanceButton = false;
 	$("#startstop").click(function() {
 		var now = new Date();
 		if (startDate === null)
@@ -372,7 +371,6 @@ $(document).ready(function(){
 			canChangeSpeed = true;
 			startDate = now;
 			$(this).text("Stop");
-			//BUG RUNNING AT THE SAME TIME AS MY OTHER INTERVAL TIMER
 			interval_timer = setInterval(runAutomaton, speed); //global variable
 			canAdvanceAutomaton = true;
 		
@@ -386,6 +384,7 @@ $(document).ready(function(){
 		}
 	});
 	
+	//marks all cells as dead
 	$('#reset').click(function() {
 		reset();	
 	});
@@ -402,10 +401,16 @@ $(document).ready(function(){
 	});
 	//reset default values
 	$('#default').click(function() {
-		neighborhoodRadius = 1; 
+		$neighborhoodRadiusInput.val(1);
+		neighborhoodRadius = 1;
+		changeLoneliness.value = 2;
 		loneliness = 2;
+		changeOverpopulation.value = 3;
 		overpopulation = 3;
-		gMin =3, gMax = 3;
+		changeGMin.value = 3;
+		gMin = 3;
+		changeGMax.value = 3;
+		gMax = 3;
 		alwaysAlive = false;
 		toroidal = false;
 		alwaysDead = true;
@@ -434,123 +439,89 @@ $(document).ready(function(){
 	});
 	
 	//changes speed of program according to slider
-	$('#slider').click(function(){
+	$('#slider').click(function() {
 		speed = parseInt($('#slider').val());
 		if (!paused && canChangeSpeed){
 			clearInterval(interval_timer);
-			//BUG GAME IS RUNNING EVEN WHEN IT'S PAUSED
 			interval_timer = setInterval(runAutomaton, speed);
 		}
 	
 	});
-	//var interval_timer = setInterval(runAutomaton, speed);
 	
-	
-	//gets neigborhood radius
-	document.getElementById("changeRadius").addEventListener("keydown", function()
-	{
-		neighborhoodRadius = this.value;
-		neighborhoodRadius = parseInt(neighborhoodRadius);
-	}, false); 
 	//changes neigborhood radius
-	document.getElementById("changeRadius").onkeypress = function(evt)
-	{
-		if (!evt) {
-			evt = window.event;
-		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
-			if (neighborhoodRadius < 1 || neighborhoodRadius > 10) {
+	$("#changeRadius").keypress(function(evt) {
+		if (evt.keyCode === 13) {
+			//enter pressed 
+			var $userRadius = $(this).val();
+			if ($userRadius < 1 || $userRadius > 10) {
 				alert("You must enter a number between 1 and 10. Try again!");
-				alert("Neighborhood radius reset to default value!");
-				neighborhoodRadius = 1;
+				$(this).val(1);
 			}
-	
+			else
+				neighborhoodRadius = $userRadius;
 		}
-	};
+	});
+
 	//change loneliness threshold
-	document.getElementById("changeLoneliness").addEventListener("keydown", function()
-	{
-		loneliness = this.value;
-	}, false); 
 	document.getElementById("changeLoneliness").onkeypress = function(evt)
 	{
-		if (!evt) {
-			evt = window.event;
-		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
-			if (loneliness <= 0 || loneliness > overpopulation) {
-				alert("Invalid input. Try again!");
-				alert("Loneliness reset to default value!");
-				loneliness = 2;
+		if (evt.keyCode === 13) {
+			//enter pressed
+			var input = parseInt(this.value);
+			if (input <= 0 || input > overpopulation) {
+				alert("Loneliness must be > 0 and less than overpopulation threshold");
+				this.value = 2;
 			}
-	
+			else
+				loneliness = parseInt(this.value);
 		}
 	};
+
 	//change overpopulation threshold
-	document.getElementById("changeOverpopulation").addEventListener("keydown", function()
-	{
-		overpopulation = this.value;
-	}, false);
-	
 	document.getElementById("changeOverpopulation").onkeypress = function(evt)
 	{
-		if (!evt) {
-			evt = window.event;
-		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
-			if (overpopulation < loneliness || overpopulation >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius))
-	 		{
+		if (evt.keyCode === 13) {
+			//enter pressed
+			var input = parseInt(this.value);
+			if (input < loneliness || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
 				alert("Invalid input. Try again!");
-				alert("Overpopulation reset to default value");
-				overpopulation = 3;
+				this.value = 3;
 			}
-	
+			else
+				overpopulation = parseInt(this.value);
 		}
-	};
-	//change gMin and gMax
-	document.getElementById("changeGMin").addEventListener("keydown", function()
-	{
-		gMin = this.value;
-	}, false);
+	};  
+
 	document.getElementById("changeGMin").onkeypress = function(evt)
 	{
-		if (!evt) {
-			evt = window.event;
-		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
-			if (gMin <= 0 || gMin > gMax)
-	 		{
-				alert("Invalid input. Try again!");
-				alert("generation min reset to default value");
-				gMin = 3;
+		if (evt.keyCode === 13) {
+			//enter pressed
+			var input = parseInt(this.value);
+			if (input <= 0 || input > gMax) {
+				alert("Generation min must be > 0 and <= generation max threshold");
+				this.value = 3;
+
 			}
+			else
+				gMin = parseInt(this.value);
 	
 		}
-	};
-	
-	document.getElementById("changeGMax").addEventListener("keydown", function()
-	{
-		gMax = this.value;
-	}, false);
+	}; 
+
 	document.getElementById("changeGMax").onkeypress = function(evt)
 	{
-		if (!evt) {
-			evt = window.event;
-		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
-			if (gMax < gMin || gMax >=  (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius))
-	 		{
+		if (evt.keyCode === 13) {
+			//enter pressed
+			var input = parseInt(this.value);
+			if (input < gMin || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
 				alert("Invalid input. Try again!");
-				alert("generation min reset to default value");
-				gMin = 3;
+				this.value = 3;
 			}
+			else
+				gMax = parseInt(this.value);
+			
 		}
-	};
+	};  
 
 });
 
