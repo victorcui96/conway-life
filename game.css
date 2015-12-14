@@ -50,6 +50,11 @@ button {
 	margin-left: 145px;
 }
 
+/* extra settings */
+#changeRadius {
+	width: 110px;
+}
+
 #funsettings {
 	display:inline;
 	color: Blue;
