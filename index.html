@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title> Victor Cui's adaptation of CGoL </title>
+	<head lang="en">
+		<title> Victor Cui's adaptation of Conway's Game of Life </title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="main.css">
 		<script type="text/javascript" src="http://www.cs.unc.edu/Courses/comp426-f15/jquery-1.11.3.js"></script>
 		<script type="text/javascript" src="main.js"></script>
@@ -9,67 +11,80 @@
 	</head>
 	
 	<body>
-		<div>
-			<h2> Victor Cui's take on CGoL</h2>
-		</div>
-		
-		<div>
-		
+		<div class="container">
+			<div>
+				<h2> Victor's take on Conway's Game of Life</h2>
+			</div>
 			
-			<canvas id="grid" width="200px" height="200px" style="border:1px solid #000000;">
-				
-			</canvas>
+			<div>
 		
-		</div>
-		
-		<fieldset>
-			<label> Enter your desired grid dimensions (must be between 20 and 200): </label>
-				<input type ="number" id="dimensions" />
-			<button id="startstop" type ="button" > Start </button>
-			<button id="reset" type ="button"> Reset! </button>
-			<button id="randomize" type ="button"> Randomize! </button>
-			<button id="nextstep" type ="button"> Next Step </button>
-			
-		</fieldset>
-		<div>
-			<fieldset id="extrasettings">
-				<p id="funsettings"> <strong> Fun Settings</strong> </p>
-				<br>
-					<span> <b>Adjust speed </b></span>
-						<input id="slider" type="range" min="0" max="1000" value="200" />
-					<button id="default" type ="button"> Reset default values </button>
+				<canvas id="grid" width="500px" height="500px" style="border:1px solid #000000;"> </canvas>
 					
-				<p id="hint"> <strong>Hint: </strong> Hit <em>enter</em> after typing in a number </p>
-					<label> <strong> Neighborhood radius </strong> </label>
-						<input type = "number" id="changeRadius" min="1" max="10" value="1"/>
-						<span> <strong>Default value: 1</strong> </span>
-				<br>
-					<label> <strong> Loneliness threshold </strong> </label>
-						<input type = "number" id="changeLoneliness" value="2"/>
-						<span> <strong>Default value: 2</strong> </span>
-				<br>
-					<label> <strong> Overpopulation threshold </strong> </label>
-						<input type = "number" id="changeOverpopulation" value="3"/>
-						<span> <strong>Default value: 3</strong> </span>
-				<br>
-					<label> <strong> Generation min threshold </strong></label>
-						<input type = "number" id="changeGMin" value="3"/>
-						<span> <strong>Default value: 3</strong> </span>
-				<br>
-					<label> <strong> Generation max threshold </strong> </label>
-						<input type = "number" id="changeGMax" value="3"/>
-						<span> <strong>Default value: 3</strong> </span>
+			</div>
+
+			<div id="reg-settings"> 
+				<button id="startstop" type ="button" class="btn btn-default"> Start </button>
+				<button id="reset" type ="button" class="btn btn-default"> Reset! </button>
+				<button id="randomize" type ="button" class="btn btn-default"> Randomize! </button>
+				<button id="nextstep" type ="button" class="btn btn-default"> Next Step </button>
+			</div>
+
+
+			<div class="settings">
+			
 				
-			</fieldset>
-		</div>
-		<div class="wackySettings">
-			<p> Wacky Settings </p>
-			<p id="outsideMode"> Current mode: Always Dead </p>
-			<span> Cells outside the grid are: </span>
-				<button id="alwaysDead" type ="button"> Always Dead</button>
-				<button id="alwaysAlive" type ="button"> Always Alive</button>
-				<button id="toroidal" type ="button"> Wrap Around </button>
-		</div>
+					
+					
+					
+						<h4 id="funsettings"> <strong> Fun Settings</strong> </h4>
+						
+						<p id="hint"> <strong>Hint: </strong> Hit <em>enter</em> after typing in a number </p>
+
+						<span> <b>Adjust speed </b></span>
+								<input id="slider" type="range" min="0" max="1000" value="200" />
+						
+
+						<label for="dimensions" class="dimensions" > <span> Enter desired grid dimensions </span>(must be between 20 and 200):  <input id="dimensions" type ="number" /> </label>
+								
+							
+							
+						
+							<label> <strong> Neighborhood radius </strong> </label>
+								<input type = "number" id="changeRadius" min="1" max="10" value="1"/>
+								<span> <strong>Default value: 1</strong> </span>
+						<br>
+							<label> <strong> Loneliness threshold </strong> </label>
+								<input type = "number" id="changeLoneliness" value="2"/>
+								<span> <strong>Default value: 2</strong> </span>
+						<br>
+							<label> <strong> Overpopulation threshold </strong> </label>
+								<input type = "number" id="changeOverpopulation" value="3"/>
+								<span> <strong>Default value: 3</strong> </span>
+						<br>
+							<label> <strong> Generation min threshold </strong></label>
+								<input type = "number" id="changeGMin" value="3"/>
+								<span> <strong>Default value: 3</strong> </span>
+						<br>
+							<label> <strong> Generation max threshold </strong> </label>
+								<input type = "number" id="changeGMax" value="3"/>
+								<span> <strong>Default value: 3</strong> </span>
+
+						<br>
+						<button id="default" class="btn-primary" type ="button"> Reset default values </button>
+						
+					
+				
+				<div class="wackySettings">
+					<p id="wackySettings"> Wacky Settings </p>
+					<p id="outsideMode"> Current mode: Always Dead </p>
+					<span> Cells outside the grid are: </span>
+						<button id="alwaysDead" class="btn-info" type ="button"> Always Dead</button>
+						<button id="alwaysAlive" class="btn-warning" type ="button"> Always Alive</button>
+						<button id="toroidal" class="btn-danger" type ="button"> Wrap Around </button>
+				</div>
+
+			</div> <!-- settings -->
+		 </div> <!-- Bootstrap container -->
 		
 		
 
