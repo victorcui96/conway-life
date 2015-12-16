@@ -1,6 +1,15 @@
 h2 {
 	text-align: center;
-	color: Green;
+	color: mediumvioletred;
+	font-family: 'Roboto';
+}
+
+p {
+	font-size: 110%;
+}
+
+label {
+	 margin-top: 15px; 
 }
 
 canvas {
@@ -15,66 +24,107 @@ fieldset {
 	display: inline;  
 }
 
-button {
-	color: purple;	
-	width: 60px;
-	height: 25px;
+
+/*buttons div */
+#reg-settings {
+	margin-top: 20px;
+	width: 400px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/*BS button */
+.btn-default, .btn-primary, .btn-info, .btn-warning, .btn-danger {
+	color: white;	
 	font-weight: bold;
-	text-align: center;
 } 
 
+
 #startstop {
-	color: fuchsia;
+	background-color: #090;
 }
 
 #reset {
-	color: Crimson;
+	background-color: cornflowerblue;
 }
 
 #randomize {
-	color: Lime;
-	width: 100px;
+	background-color: chocolate;
 }
 
 #nextstep {
-	width: 100px;
-	color: MidnightBlue;
-	white-space: normal;
+	background-color: orange;
+} 
+
+/* settings */
+.settings {
+	width: 600px;
+	margin: 0 auto;
+	margin-top: 30px;
 }
 
-#extrasettings {
-	position: relative;
-	right: 140px;
-	width: 850px;
-	margin-right: auto;
-	margin-left: 145px;
+#hint {
+	/* margin-bottom: -5px; */
 }
+#hint em {
+	font-style: bolder;
+	color: magenta;
+
+}
+
+#slider {
+	width: 80%;
+}
+
+
+#funsettings {
+	padding-left: 40%; 
+	color: Blue;
+	margin-bottom: 15px;
+}
+
+.dimensions {
+	font-weight: normal;
+}
+
+.dimensions span {
+	font-weight: bold;
+}
+
+
+#dimensions {
+	display: inline-block;
+}
+
+#grid-size {
+	display: inline;
+}
+
+
 
 /* extra settings */
 #changeRadius {
 	width: 110px;
 }
 
-#funsettings {
-	display:inline;
-	color: Blue;
-}
+
 
 #default {
 	margin-bottom: 15px;
-	height: 50px;
-}
-.hint em {
-	font-style: normal;
-	color: #ffa500;
+	margin-top: 15px;
+	height: 35px;
 }
 
-label {
-	margin-top: 20px;
-}
 
-.wackySettings p {
+#wackySettings {
+	padding-left: 40%;
 	color: red;
+	font-weight: bold;
+
+}
+.wackySettings span {
+	font-weight: bold;
 }
 
 .wackySettings button {
@@ -83,7 +133,6 @@ label {
 
 #outsideMode{
 	color: dodgerblue;
-	text-emphasis: bold;
 }
 
 
