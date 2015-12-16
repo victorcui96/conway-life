@@ -2,6 +2,8 @@ $(document).ready(function() {
 
 	var canvas = document.getElementById("grid");
 	var context = canvas.getContext("2d");
+	var $nextStepBtn = $("#nextstep");
+	$nextStepBtn.hide();
 	//creating a 2-D array that holds the squares in my canvas
 	function create2DArr()
 	{
@@ -371,6 +373,7 @@ $(document).ready(function() {
 			canChangeSpeed = true;
 			startDate = now;
 			$(this).text("Stop");
+			$nextStepBtn.fadeOut("fast");	
 			interval_timer = setInterval(runAutomaton, speed); //global variable
 			canAdvanceAutomaton = true;
 		
@@ -380,6 +383,8 @@ $(document).ready(function() {
 			clearInterval(interval_timer);
 			startDate = null;
 			$(this).text("Start");
+			//displaying next step button
+			$nextStepBtn.fadeIn(1000);
 		
 		}
 	});
@@ -522,6 +527,8 @@ $(document).ready(function() {
 			
 		}
 	};  
+	//want game to be already set up when page loads
+	randomize();
 
 });
 
