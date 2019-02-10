@@ -5,27 +5,36 @@ $(document).ready(function() {
 	var $nextStepBtn = $("#nextstep");
 	$nextStepBtn.hide();
 	//creating a 2-D array that holds the squares in my canvas
-	function create2DArr()
-	{
-		var arr = [];
-		for (var i = 0; i < canvas.height / 10; i++) {
-	    	arr[i] = [];
-	  	}
-	  	return arr;
-	}
-	var twoDarr = create2DArr();
-	//fills up my 2D array
-	function fillUp2DArr()
-	{
-		for (var i = 0; i < canvas.height / 10; i++)
-		{
-			for (var j = 0; j < canvas.height  / 10; j++)
-			{
-				twoDarr[i][j] = 0;
-			}
+	// function create2DArr(canvas)
+	// {
+	// 	var arr = [];
+	// 	for (var i = 0; i < canvas.height / 10; i++) {
+	//     	arr[i] = [];
+	//   	}
+	//   	return arr;
+	// }
+	const twoDarr = (canvas) => {
+		let arr = [];
+		for (let i = 0; i < canvas.heigth / 10; i++) {
+			arr[i] = [];
 		}
+		return arr;
 	}
-	fillUp2DArr();
+	let twoDArray = twoDarr(canvas);
+	
+	// create2DArr(canvas);
+	//fills up my 2D array
+	// function fillUp2DArr()
+	// {
+	// 	for (var i = 0; i < canvas.height / 10; i++)
+	// 	{
+	// 		for (var j = 0; j < canvas.height  / 10; j++)
+	// 		{
+	// 			twoDarr[i][j] = 0;
+	// 		}
+	// 	}
+	// }
+	// fillUp2DArr();
 	
 	//drawing the grid on the canvas
 	function makeGrid(gridPxSize, color) 
@@ -242,293 +251,293 @@ $(document).ready(function() {
 			}
 		}
 		//know which cells are destined to live, so copy temp back into main array
-		twoDarr = [];
-		for (var k = 0; k < tempArr.length; k++)
-		{
-			twoDarr[k] = tempArr[k].slice();
-		}
-		liveOrDie();
-	}
+	// 	twoDarr = [];
+	// 	for (var k = 0; k < tempArr.length; k++)
+	// 	{
+	// 		twoDarr[k] = tempArr[k].slice();
+	// 	}
+	// 	liveOrDie();
+	// }
 	//fills in the square if it's alive
-	function liveOrDie()
-	{
-		for (var x = 0; x < twoDarr.length; x++)
-		{
-			for (var y = 0; y < twoDarr[x].length; y++)
-			{
-				if (twoDarr[x][y] === 1)
-				{
-					fillSquare(context, y* 10, x * 10);
-				}
-				else if (twoDarr[x][y] === 0)
-				{
-					killSquare(context, y*10, x*10);
-				} 
-				else
-				{
-					makeLightGreen(context, y*10, x*10);
-				}
+	// function liveOrDie()
+	// {
+	// 	for (var x = 0; x < twoDarr.length; x++)
+	// 	{
+	// 		for (var y = 0; y < twoDarr[x].length; y++)
+	// 		{
+	// 			if (twoDarr[x][y] === 1)
+	// 			{
+	// 				fillSquare(context, y* 10, x * 10);
+	// 			}
+	// 			else if (twoDarr[x][y] === 0)
+	// 			{
+	// 				killSquare(context, y*10, x*10);
+	// 			} 
+	// 			else
+	// 			{
+	// 				makeLightGreen(context, y*10, x*10);
+	// 			}
 	
-			}
+	// 		}
 	
-		}
-	}
+	// 	}
+	// }
 	
 	//death by loneliness
-	function deathByLoneliness(x)
-	{
-		return x < loneliness;
-	}
+	// function deathByLoneliness(x)
+	// {
+	// 	return x < loneliness;
+	// }
 	
-	function deathByOverpopulation(x)
-	{
-		return x > overpopulation;
-	}
+	// function deathByOverpopulation(x)
+	// {
+	// 	return x > overpopulation;
+	// }
 	
-	function equilibrium(x)
-	{
-		return (x === 2 || x === 3);
-	}
+	// function equilibrium(x)
+	// {
+	// 	return (x === 2 || x === 3);
+	// }
 	
 	//only applies to currently dead cells
-	function spawnNextGeneration(x)
-	{
-		return (x >= gMin && x <= gMax);
-	}
+	// function spawnNextGeneration(x)
+	// {
+	// 	return (x >= gMin && x <= gMax);
+	// }
 		
 	//search for neighbors within a neighborhood radius
-	function countLiveNeighbors(x, y)
-	{
+	// function countLiveNeighbors(x, y)
+	// {
 	
-		var liveNeighbors = 0;
-		for (var r = x - neighborhoodRadius; r <= (x - neighborhoodRadius) + neighborhoodRadius*2; r++)
-		{
-			for (var c = y - neighborhoodRadius; c <= (y - neighborhoodRadius) + neighborhoodRadius*2; c++)
-			{
-				if (r === x && c === y) {
-					//don't want to check myself
-					continue;
-				}
-				if (checkCoordinates(r,c) && twoDarr[r][c] === 1) {
-					liveNeighbors += 1;
-				}
+	// 	var liveNeighbors = 0;
+	// 	for (var r = x - neighborhoodRadius; r <= (x - neighborhoodRadius) + neighborhoodRadius*2; r++)
+	// 	{
+	// 		for (var c = y - neighborhoodRadius; c <= (y - neighborhoodRadius) + neighborhoodRadius*2; c++)
+	// 		{
+	// 			if (r === x && c === y) {
+	// 				//don't want to check myself
+	// 				continue;
+	// 			}
+	// 			if (checkCoordinates(r,c) && twoDarr[r][c] === 1) {
+	// 				liveNeighbors += 1;
+	// 			}
 					
-			}
-		}
-		return liveNeighbors;
+	// 		}
+	// 	}
+	// 	return liveNeighbors;
+	// }
+	
+	// function reset()
+	// {
+	// 	for (var x = 0; x < twoDarr.length; x++)
+	// 	{
+	// 		for (var y = 0; y < twoDarr[x].length; y++)
+	// 		{
+	// 			killSquare(context, y*10, x*10);
+	// 			twoDarr[x][y] = 0;
+	// 		}
+	// 	}
 	}
 	
-	function reset()
-	{
-		for (var x = 0; x < twoDarr.length; x++)
-		{
-			for (var y = 0; y < twoDarr[x].length; y++)
-			{
-				killSquare(context, y*10, x*10);
-				twoDarr[x][y] = 0;
-			}
-		}
-	}
-	
-	function randomize()
-	{
-		for (var x = 0; x < twoDarr.length; x++)
-		{
-			for (var y = 0; y < twoDarr[x].length; y++)
-			{
-				var randNum = Math.floor(Math.random() * 2);
-				if (randNum === 0) {
-					twoDarr[x][y] = 0;
-					killSquare(context, y*10, x*10);
-				}
-				else {
-					twoDarr[x][y] = 1;
-					fillSquare(context, y*10, x*10);
-				}
+	// function randomize()
+	// {
+	// 	for (var x = 0; x < twoDarr.length; x++)
+	// 	{
+	// 		for (var y = 0; y < twoDarr[x].length; y++)
+	// 		{
+	// 			var randNum = Math.floor(Math.random() * 2);
+	// 			if (randNum === 0) {
+	// 				twoDarr[x][y] = 0;
+	// 				killSquare(context, y*10, x*10);
+	// 			}
+	// 			else {
+	// 				twoDarr[x][y] = 1;
+	// 				fillSquare(context, y*10, x*10);
+	// 			}
 				
 				
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 	
-	function checkCoordinates(x, y)
-	{
-		if (x < 0 || y < 0 || x >= twoDarr.length || y >= twoDarr.length) {
-			//ALWAYS DEAD- CHANGE THIS
-			return false;
-		}
-		return true;
-	}
+	// function checkCoordinates(x, y)
+	// {
+	// 	if (x < 0 || y < 0 || x >= twoDarr.length || y >= twoDarr.length) {
+	// 		//ALWAYS DEAD- CHANGE THIS
+	// 		return false;
+	// 	}
+	// 	return true;
+	// }
 
 	//run the automaton
-	var startDate = null;
-	var canAdvanceAutomaton = false, canChangeSpeed = false;
-	var paused = false;
-	var interval_timer;
-	$("#startstop").click(function() {
-		var now = new Date();
-		if (startDate === null)
-		{
-			paused = false;
-			canChangeSpeed = true;
-			startDate = now;
-			$(this).text("Stop");
-			$nextStepBtn.fadeOut("fast");	
-			interval_timer = setInterval(runAutomaton, speed); //global variable
-			canAdvanceAutomaton = true;
+	// var startDate = null;
+	// var canAdvanceAutomaton = false, canChangeSpeed = false;
+	// var paused = false;
+	// var interval_timer;
+	// $("#startstop").click(function() {
+	// 	var now = new Date();
+	// 	if (startDate === null)
+	// 	{
+	// 		paused = false;
+	// 		canChangeSpeed = true;
+	// 		startDate = now;
+	// 		$(this).text("Stop");
+	// 		$nextStepBtn.fadeOut("fast");	
+	// 		interval_timer = setInterval(runAutomaton, speed); //global variable
+	// 		canAdvanceAutomaton = true;
 		
-		}
-		else {
-			paused = true;
-			clearInterval(interval_timer);
-			startDate = null;
-			$(this).text("Start");
-			//displaying next step button
-			$nextStepBtn.fadeIn(1000);
+	// 	}
+	// 	else {
+	// 		paused = true;
+	// 		clearInterval(interval_timer);
+	// 		startDate = null;
+	// 		$(this).text("Start");
+	// 		//displaying next step button
+	// 		$nextStepBtn.fadeIn(1000);
 		
-		}
-	});
+	// 	}
+	// });
 	
 	//marks all cells as dead
-	$('#reset').click(function() {
-		reset();	
-	});
+	// $('#reset').click(function() {
+	// 	reset();	
+	// });
 	
-	$('#randomize').click(function() {
-		randomize();
-	});
+	// $('#randomize').click(function() {
+	// 	randomize();
+	// });
 	
 	//advance automaton by one step
-	$('#nextstep').click(function() {
-		if (canAdvanceAutomaton) {
-			runAutomaton();
-		}
-	});
+	// $('#nextstep').click(function() {
+	// 	if (canAdvanceAutomaton) {
+	// 		runAutomaton();
+	// 	}
+	// });
 	//reset default values
-	$('#default').click(function() {
-		$neighborhoodRadiusInput.val(1);
-		neighborhoodRadius = 1;
-		changeLoneliness.value = 2;
-		loneliness = 2;
-		changeOverpopulation.value = 3;
-		overpopulation = 3;
-		changeGMin.value = 3;
-		gMin = 3;
-		changeGMax.value = 3;
-		gMax = 3;
-		alwaysAlive = false;
-		toroidal = false;
-		alwaysDead = true;
-		document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
-	});
-	var alwaysAlive = false, toroidal = false, alwaysDead = true;
+	// $('#default').click(function() {
+	// 	$neighborhoodRadiusInput.val(1);
+	// 	neighborhoodRadius = 1;
+	// 	changeLoneliness.value = 2;
+	// 	loneliness = 2;
+	// 	changeOverpopulation.value = 3;
+	// 	overpopulation = 3;
+	// 	changeGMin.value = 3;
+	// 	gMin = 3;
+	// 	changeGMax.value = 3;
+	// 	gMax = 3;
+	// 	alwaysAlive = false;
+	// 	toroidal = false;
+	// 	alwaysDead = true;
+	// 	document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
+	// });
+	// var alwaysAlive = false, toroidal = false, alwaysDead = true;
 	//changing references outside grid
-	$('#alwaysDead').click(function() {
-		document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
-		alwaysDead = true;
-		alwaysAlive = false;
-		toroidal = false;
-	});
-	$('#alwaysAlive').click(function() {
-		document.getElementById("outsideMode").innerHTML = "Current mode: Always Alive!";
-		alwaysAlive = true;
-		alwaysDead = false;
-		toroidal = false;
+	// $('#alwaysDead').click(function() {
+	// 	document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
+	// 	alwaysDead = true;
+	// 	alwaysAlive = false;
+	// 	toroidal = false;
+	// });
+	// $('#alwaysAlive').click(function() {
+	// 	document.getElementById("outsideMode").innerHTML = "Current mode: Always Alive!";
+	// 	alwaysAlive = true;
+	// 	alwaysDead = false;
+	// 	toroidal = false;
 		
-	});
-	$('#toroidal').click(function() {
-		document.getElementById("outsideMode").innerHTML = "Current mode: Wrap Around!";
-		toroidal = true;
-		alwaysAlive = false;
-		alwaysDead = false;
-	});
+	// });
+	// $('#toroidal').click(function() {
+	// 	document.getElementById("outsideMode").innerHTML = "Current mode: Wrap Around!";
+	// 	toroidal = true;
+	// 	alwaysAlive = false;
+	// 	alwaysDead = false;
+	// });
 	
 	//changes speed of program according to slider
-	$('#slider').click(function() {
-		speed = parseInt($('#slider').val());
-		if (!paused && canChangeSpeed){
-			clearInterval(interval_timer);
-			interval_timer = setInterval(runAutomaton, speed);
-		}
+	// $('#slider').click(function() {
+	// 	speed = parseInt($('#slider').val());
+	// 	if (!paused && canChangeSpeed){
+	// 		clearInterval(interval_timer);
+	// 		interval_timer = setInterval(runAutomaton, speed);
+	// 	}
 	
-	});
+	// });
 	
 	//changes neigborhood radius
-	$("#changeRadius").keypress(function(evt) {
-		if (evt.keyCode === 13) {
-			//enter pressed 
-			var $userRadius = $(this).val();
-			if ($userRadius < 1 || $userRadius > 10) {
-				alert("You must enter a number between 1 and 10. Try again!");
-				$(this).val(1);
-			}
-			else
-				neighborhoodRadius = $userRadius;
-		}
-	});
+	// $("#changeRadius").keypress(function(evt) {
+	// 	if (evt.keyCode === 13) {
+	// 		//enter pressed 
+	// 		var $userRadius = $(this).val();
+	// 		if ($userRadius < 1 || $userRadius > 10) {
+	// 			alert("You must enter a number between 1 and 10. Try again!");
+	// 			$(this).val(1);
+	// 		}
+	// 		else
+	// 			neighborhoodRadius = $userRadius;
+	// 	}
+	// });
 
 	//change loneliness threshold
-	document.getElementById("changeLoneliness").onkeypress = function(evt)
-	{
-		if (evt.keyCode === 13) {
-			//enter pressed
-			var input = parseInt(this.value);
-			if (input <= 0 || input > overpopulation) {
-				alert("Loneliness must be > 0 and less than overpopulation threshold");
-				this.value = 2;
-			}
-			else
-				loneliness = parseInt(this.value);
-		}
-	};
+	// document.getElementById("changeLoneliness").onkeypress = function(evt)
+	// {
+	// 	if (evt.keyCode === 13) {
+	// 		//enter pressed
+	// 		var input = parseInt(this.value);
+	// 		if (input <= 0 || input > overpopulation) {
+	// 			alert("Loneliness must be > 0 and less than overpopulation threshold");
+	// 			this.value = 2;
+	// 		}
+	// 		else
+	// 			loneliness = parseInt(this.value);
+	// 	}
+	// };
 
 	//change overpopulation threshold
-	document.getElementById("changeOverpopulation").onkeypress = function(evt)
-	{
-		if (evt.keyCode === 13) {
-			//enter pressed
-			var input = parseInt(this.value);
-			if (input < loneliness || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
-				alert("Invalid input. Try again!");
-				this.value = 3;
-			}
-			else
-				overpopulation = parseInt(this.value);
-		}
-	};  
+	// document.getElementById("changeOverpopulation").onkeypress = function(evt)
+	// {
+	// 	if (evt.keyCode === 13) {
+	// 		//enter pressed
+	// 		var input = parseInt(this.value);
+	// 		if (input < loneliness || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
+	// 			alert("Invalid input. Try again!");
+	// 			this.value = 3;
+	// 		}
+	// 		else
+	// 			overpopulation = parseInt(this.value);
+	// 	}
+	// };  
 
-	document.getElementById("changeGMin").onkeypress = function(evt)
-	{
-		if (evt.keyCode === 13) {
-			//enter pressed
-			var input = parseInt(this.value);
-			if (input <= 0 || input > gMax) {
-				alert("Generation min must be > 0 and <= generation max threshold");
-				this.value = 3;
+	// document.getElementById("changeGMin").onkeypress = function(evt)
+	// {
+	// 	if (evt.keyCode === 13) {
+	// 		//enter pressed
+	// 		var input = parseInt(this.value);
+	// 		if (input <= 0 || input > gMax) {
+	// 			alert("Generation min must be > 0 and <= generation max threshold");
+	// 			this.value = 3;
 
-			}
-			else
-				gMin = parseInt(this.value);
+	// 		}
+	// 		else
+	// 			gMin = parseInt(this.value);
 	
-		}
-	}; 
+	// 	}
+	// }; 
 
-	document.getElementById("changeGMax").onkeypress = function(evt)
-	{
-		if (evt.keyCode === 13) {
-			//enter pressed
-			var input = parseInt(this.value);
-			if (input < gMin || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
-				alert("Invalid input. Try again!");
-				this.value = 3;
-			}
-			else
-				gMax = parseInt(this.value);
+	// document.getElementById("changeGMax").onkeypress = function(evt)
+	// {
+	// 	if (evt.keyCode === 13) {
+	// 		//enter pressed
+	// 		var input = parseInt(this.value);
+	// 		if (input < gMin || input >= (4*neighborhoodRadius*neighborhoodRadius + 4*neighborhoodRadius)) {
+	// 			alert("Invalid input. Try again!");
+	// 			this.value = 3;
+	// 		}
+	// 		else
+	// 			gMax = parseInt(this.value);
 			
-		}
-	};  
+	// 	}
+	// };  
 	//want game to be already set up when page loads
-	randomize();
+	// randomize();
 
 });
 
