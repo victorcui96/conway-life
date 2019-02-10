@@ -13,7 +13,7 @@ $(document).ready(function() {
 		}
 		return arr;
 	}
-	let logicalGrid = createLogicalGrid(canvas);
+	const logicalGrid = createLogicalGrid(canvas);
 	
 	//drawing the grid on the canvas
 	const makeGrid = (gridPxSize, color, canvas) => {
@@ -134,20 +134,19 @@ $(document).ready(function() {
 	var gMax = parseInt(changeGMax.value);
 	var speed = 200;
 	
-	function runAutomaton()
-	{
+	const runAutomaton = logicalGrid => {
 		//need a temp array to determine which cells are destined to live
 		//original array is kept the same
 		var tempArr = [];
-		for (var i = 0; i < createLogicalGrid.length; i++)
+		for (var i = 0; i < logicalGrid.length; i++)
 		{
-			tempArr[i] = createLogicalGrid[i].slice();
+			tempArr[i] = logicalGrid[i].slice();
 		}
 		for (var x = 0; x < tempArr.length; x++)
 		{
 			for (var y = 0; y < tempArr[x].length; y++)
 			{
-				var count = countLiveNeighbors(x,y);
+				var count = countLiveNeighbors(x,y, tempArr);
 				if (alwaysAlive) {
 					var insideNeighbors = 0;
 					for (var col = x - neighborhoodRadius; col <= (x-neighborhoodRadius) + neighborhoodRadius*2; col++)
@@ -178,7 +177,7 @@ $(document).ready(function() {
 	
 				}
 				
-				if (createLogicalGrid[x][y] === 1)
+				if (logicalGrid[x][y] === 1)
 				{
 		
 					if (deathByLoneliness(count)) 
@@ -201,31 +200,30 @@ $(document).ready(function() {
 			}
 		}
 		//know which cells are destined to live, so copy temp back into main array
-		createLogicalGrid = [];
 		for (var k = 0; k < tempArr.length; k++)
 		{
-			createLogicalGrid[k] = tempArr[k].slice();
+			logicalGrid[k] = tempArr[k].slice();
 		}
-		liveOrDie();
+		liveOrDie(logicalGrid, squareWidth);
 	}
-	//fills in the square if it's alive
-	function liveOrDie()
-	{
-		for (var x = 0; x < createLogicalGrid.length; x++)
+	
+	const liveOrDie = (logicalGrid, squareWidth) => {
+		for (var x = 0; x < logicalGrid.length; x++)
 		{
-			for (var y = 0; y < createLogicalGrid[x].length; y++)
+			for (var y = 0; y < logicalGrid[x].length; y++)
 			{
-				if (createLogicalGrid[x][y] === 1)
+				if (logicalGrid[x][y] === 1)
 				{
-					fillSquare(context, y* 10, x * 10);
+					// fills in the square if it's alive
+					fillSquare(context, y* 10, x * 10, squareWidth);
 				}
-				else if (createLogicalGrid[x][y] === 0)
+				else if (logicalGrid[x][y] === 0)
 				{
-					killSquare(context, y*10, x*10);
+					killSquare(context, y*10, x*10, squareWidth);
 				} 
 				else
 				{
-					markOnceAliveSquares(context, y*10, x*10);
+					markOnceAliveSquares(context, y*10, x*10, squareWidth);
 				}
 	
 			}
@@ -253,9 +251,7 @@ $(document).ready(function() {
 	}
 		
 	//search for neighbors within a neighborhood radius
-	function countLiveNeighbors(x, y)
-	{
-	
+	const countLiveNeighbors = (x, y, logicalGrid) => {
 		var liveNeighbors = 0;
 		for (var r = x - neighborhoodRadius; r <= (x - neighborhoodRadius) + neighborhoodRadius*2; r++)
 		{
@@ -265,7 +261,7 @@ $(document).ready(function() {
 					//don't want to check myself
 					continue;
 				}
-				if (checkCoordinates(r,c) && createLogicalGrid[r][c] === 1) {
+				if (checkCoordinates(r,c) && logicalGrid[r][c] === 1) {
 					liveNeighbors += 1;
 				}
 					
@@ -274,14 +270,13 @@ $(document).ready(function() {
 		return liveNeighbors;
 	}
 	
-	function reset()
-	{
-		for (var x = 0; x < createLogicalGrid.length; x++)
+	const reset = (logicalGrid, squareWidth) => {
+		for (var x = 0; x < logicalGrid.length; x++)
 		{
-			for (var y = 0; y < createLogicalGrid[x].length; y++)
+			for (var y = 0; y < logicalGrid[x].length; y++)
 			{
-				killSquare(context, y*10, x*10);
-				createLogicalGrid[x][y] = 0;
+				killSquare(context, y*10, x*10, squareWidth);
+				logicalGrid[x][y] = 0;
 			}
 		}
 	}
@@ -330,7 +325,7 @@ $(document).ready(function() {
 			startDate = now;
 			$(this).text("Stop");
 			$nextStepBtn.fadeOut("fast");	
-			interval_timer = setInterval(runAutomaton, speed); //global variable
+			interval_timer = setInterval(runAutomaton(logicalGrid), speed); //global variable
 			canAdvanceAutomaton = true;
 		
 		}
@@ -347,11 +342,11 @@ $(document).ready(function() {
 	
 	//marks all cells as dead
 	$('#reset').click(function() {
-		reset();	
+		reset(logicalGrid, squareWidth);	
 	});
 	
 	$('#randomize').click(function() {
-		randomize();
+		randomize(logicalGrid, squareWidth);
 	});
 	
 	//advance automaton by one step
