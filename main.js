@@ -146,7 +146,7 @@ $(document).ready(function() {
 		{
 			for (var y = 0; y < tempArr[x].length; y++)
 			{
-				var count = countLiveNeighbors(x,y, tempArr);
+				var count = countLiveNeighbors(x,y, logicalGrid);
 				if (alwaysAlive) {
 					var insideNeighbors = 0;
 					for (var col = x - neighborhoodRadius; col <= (x-neighborhoodRadius) + neighborhoodRadius*2; col++)
@@ -232,7 +232,9 @@ $(document).ready(function() {
 	}
 	
 	//death by loneliness
-	const deathByLoneliness = (x, loneliness) => x < loneliness;
+	const deathByLoneliness = (x) => {
+		return x < loneliness;
+	}
 	
 	function deathByOverpopulation(x)
 	{
@@ -261,7 +263,7 @@ $(document).ready(function() {
 					//don't want to check myself
 					continue;
 				}
-				if (checkCoordinates(r,c) && logicalGrid[r][c] === 1) {
+				if (checkCoordinates(r,c, logicalGrid) && logicalGrid[r][c] === 1) {
 					liveNeighbors += 1;
 				}
 					
@@ -302,9 +304,9 @@ $(document).ready(function() {
 		}
 	}
 	
-	function checkCoordinates(x, y)
+	function checkCoordinates(x, y, logicalGrid)
 	{
-		if (x < 0 || y < 0 || x >= createLogicalGrid.length || y >= createLogicalGrid.length) {
+		if (x < 0 || y < 0 || x >= logicalGrid.length || y >= logicalGrid.length) {
 			//ALWAYS DEAD- CHANGE THIS
 			return false;
 		}
@@ -326,6 +328,7 @@ $(document).ready(function() {
 			$(this).text("Stop");
 			$nextStepBtn.fadeOut("fast");	
 			interval_timer = setInterval(runAutomaton(logicalGrid), speed); //global variable
+			console.log("running automaton");
 			canAdvanceAutomaton = true;
 		
 		}
@@ -352,7 +355,7 @@ $(document).ready(function() {
 	//advance automaton by one step
 	$('#nextstep').click(function() {
 		if (canAdvanceAutomaton) {
-			runAutomaton();
+			runAutomaton(logicalGrid);
 		}
 	});
 	//reset default values
@@ -399,7 +402,7 @@ $(document).ready(function() {
 		speed = parseInt($('#slider').val());
 		if (!paused && canChangeSpeed){
 			clearInterval(interval_timer);
-			interval_timer = setInterval(runAutomaton, speed);
+			interval_timer = setInterval(runAutomaton(logicalGrid), speed);
 		}
 	
 	});
