@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	const canvas = document.getElementById("grid");
-	var context = canvas.getContext("2d");
+	const context = canvas.getContext("2d");
 	const squareWidth = 9;
 	const $nextStepBtn = $("#nextstep");
 	$nextStepBtn.hide();
@@ -16,7 +16,7 @@ $(document).ready(function() {
 	const logicalGrid = createLogicalGrid(canvas);
 	
 	//drawing the grid on the canvas
-	const makeGrid = (gridPxSize, color, canvas) => {
+	const makeGrid = (gridPxSize, color) => {
 		context.save();
 		context.lineWidth = 0.5;
 		drawCanvasLines(canvas, gridPxSize, true);
@@ -64,52 +64,45 @@ $(document).ready(function() {
 		context.fillStyle = "LightGreen";
 		context.fillRect(x, y, width, width);
 	}
-	const canvasClickHandler = (logicalGrid, squareWidth) => {
-		canvas.addEventListener('click', evt => {
-			const mousePosition = getRect(canvas, evt);
-			const mouseToGridX = Math.floor(mousePosition.y / 10);
-			const mouseToGridY = Math.floor(mousePosition.x / 10);
-			if (logicalGrid[mouseToGridX][mouseToGridY] === 0) {
-				//forces cell to be alive if it isn't already
-				fillSquare(context, mousePosition.x, mousePosition.y, squareWidth);
-				logicalGrid[mouseToGridX][mouseToGridY] = 1;
-			} else {
-				//forces cell to be dead if it isn't already
-				markOnceAliveSquares(context, mousePosition.x, mousePosition.y, squareWidth);
-				logicalGrid[mouseToGridX][mouseToGridY] = 0; 
-			}
-		}, false);
-	}
-	canvasClickHandler(logicalGrid, squareWidth);
-	
-	//getting the user inputted dimensions for canvas
-	var newWidth;
-	var realWidth; //this has to at least 20
-	//listening for keyup events that change dimension of canvas
-	document.getElementById("dimensions").addEventListener("keydown", function()
-	{
-		newWidth = this.value * 10;
-		realWidth = this.value;
+	canvas.addEventListener('click', evt => {
+		const mousePosition = getRect(canvas, evt);
+		const mouseToGridX = Math.floor(mousePosition.y / 10);
+		const mouseToGridY = Math.floor(mousePosition.x / 10);
+		if (logicalGrid[mouseToGridX][mouseToGridY] === 0) {
+			//forces cell to be alive if it isn't already
+			fillSquare(context, mousePosition.x, mousePosition.y, squareWidth);
+			logicalGrid[mouseToGridX][mouseToGridY] = 1;
+		} else {
+			//forces cell to be dead if it isn't already
+			markOnceAliveSquares(context, mousePosition.x, mousePosition.y, squareWidth);
+			logicalGrid[mouseToGridX][mouseToGridY] = 0; 
+		}
+	}, false);
+
+	let canvasWidth, userWidth;
+	//listening for keydown events that change dimension of canvas
+	document.getElementById("dimensions").addEventListener("keydown", function() {
+		canvasWidth = this.value * 10;
+		userWidth = this.value;
 	}, false); 
 	
 	//creates a new canvas (with new user dimensions) and deletes the old one
-	document.getElementById("dimensions").onkeypress = function(evt)
-	{
+	document.getElementById("dimensions").onkeypress = evt => {
 		//getting the specific key that the user entered
 		if (!evt) {
 			evt = window.event;
 		}
-		var keyCode = evt.keyCode || evt.which;
-		if (keyCode =='13') {
+		const keyCode = evt.keyCode || evt.which;
+		if (keyCode == '13') {
 			//enter pressed
-			if (realWidth < 20 || realWidth > 200) {
-				alert("Must be between 20 and 200");
+			if (userWidth < 20 || userWidth > 200) {
+				alert("Grid dimensions must be between 20 and 200");
 			}
 			else {
 				//clear out the old canvas
 				context.clearRect(0,0, canvas.width, canvas.height);
-				canvas.height = newWidth;
-				canvas.width = newWidth;
+				canvas.height = canvasWidth;
+				canvas.width = canvasWidth;
 				makeGrid(10, "black");
 				//restructuring my 2D array to match the new Grid
 				createLogicalGrid = create2DArr();
@@ -118,6 +111,7 @@ $(document).ready(function() {
 			}
 		}
 	};
+	
 
 	//user input for game parameters
 	var $neighborhoodRadiusInput = $("#changeRadius");
@@ -135,6 +129,7 @@ $(document).ready(function() {
 	var speed = 200;
 	
 	const runAutomaton = logicalGrid => {
+		console.log("run automata");
 		//need a temp array to determine which cells are destined to live
 		//original array is kept the same
 		var tempArr = [];
@@ -327,8 +322,7 @@ $(document).ready(function() {
 			startDate = now;
 			$(this).text("Stop");
 			$nextStepBtn.fadeOut("fast");	
-			interval_timer = setInterval(runAutomaton(logicalGrid), speed); //global variable
-			console.log("running automaton");
+			interval_timer = setInterval(() => runAutomaton(logicalGrid), speed); //global variable
 			canAdvanceAutomaton = true;
 		
 		}
