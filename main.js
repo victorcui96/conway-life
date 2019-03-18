@@ -267,22 +267,22 @@ $(document).ready(function() {
 	});
 	
 	//marks all cells as dead
-	$('#reset').click(function() {
+	$('#reset').click(() => {
 		reset(logicalGrid, squareWidth);	
 	});
 	
-	$('#randomize').click(function() {
+	$('#randomize').click(() => {
 		randomize(logicalGrid, squareWidth);
 	});
 	
 	//advance automaton by one step
-	$('#nextstep').click(function() {
+	$('#nextstep').click(() => {
 		if (canAdvanceAutomaton) {
 			runAutomaton(logicalGrid);
 		}
 	});
 	//reset default values
-	$('#default').click(function() {
+	$('#default').click(() => {
 		$neighborhoodRadiusInput.val(1);
 		neighborhoodRadius = 1;
 		lonelinessInput.value = 2;
@@ -298,24 +298,24 @@ $(document).ready(function() {
 		document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
 	});
     // changing references outside grid
-	$('#alwaysDead').click(function() {
+	$('#alwaysDead').click(() => {
 		document.getElementById("outsideMode").innerHTML = "Current mode: Always Dead!";
 		alwaysAlive = false;
 		toroidal = false;
 	});
-	$('#alwaysAlive').click(function() {
+	$('#alwaysAlive').click(() => {
 		document.getElementById("outsideMode").innerHTML = "Current mode: Always Alive!";
 		alwaysAlive = true;
 		toroidal = false;
 	});
-	$('#toroidal').click(function() {
+	$('#toroidal').click(() => {
 		document.getElementById("outsideMode").innerHTML = "Current mode: Wrap Around!";
 		toroidal = true;
 		alwaysAlive = false;
 	});
 	
 	//changes speed of program according to slider
-	$('#slider').click(function() {
+	$('#slider').click(() => {
 		speed = parseInt($('#slider').val());
 		if (!paused && canChangeSpeed){
 			clearInterval(interval_timer);
